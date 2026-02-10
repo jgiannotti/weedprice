@@ -1,0 +1,47 @@
+name: Scrape & Publish Deals (Hourly)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
+
+jobs:
+  scrape_publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install pipeline deps
+        working-directory: pipeline
+        run: npm ci
+
+      - name: Run pipeline
+        working-directory: pipeline
+        run: npm run run:all
+
+      - name: Install Wrangler
+        run: npm i -g wrangler
+
+      - name: Publish JSON to Cloudflare KV
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          KV_NAMESPACE_ID: ${{ secrets.CLOUDFLARE_KV_NAMESPACE_ID }}
+        run: |
+          # TODO: publish output files to Cloudflare KV using wrangler
+          echo "Publishing to KV"
+
+      - name: Open issue if persistent failures
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # TODO: create GitHub issue if scraping failures persist
+          echo "Check pipeline status and open issues if needed"
