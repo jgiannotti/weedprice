@@ -1,0 +1,21 @@
+name: Refresh OMMU Stores (Daily)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "13 7 * * *"
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install pipeline dependencies
+        working-directory: pipeline
+        run: npm ci
+      - name: Run OMMU refresh
+        working-directory: pipeline
+        run: npm run run:ommu
