@@ -1,0 +1,23 @@
+{
+  "cityDefault": { "name": "Tampa, FL", "lat": 27.9506, "lon": -82.4572 },
+  "radiusDefaultMiles": 15,
+  "modules": {
+    "dealRadar": true,
+    "topDeals": true,
+    "dispensaryRows": true,
+    "mapPanel": true,
+    "filtersBar": true,
+    "showConfidence": true
+  },
+  "fun": {
+    "radarSweep": true,
+    "dealBadges": true,
+    "microAnimations": true,
+    "celebrateOnNewTopDeal": false
+  },
+  "copyVariant": "playful",
+  "copy": {
+    "headline": "Best deals near you",
+    "subheadline": "Live-updating from licensed Florida MMTCs"
+  }
+}
