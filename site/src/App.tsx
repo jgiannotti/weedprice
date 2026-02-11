@@ -41,7 +41,7 @@ const App: React.FC = () => {
   const [radius, setRadius] = useState<number>(15);
 
   useEffect(() => {
-    fetch('/deals.json')
+    fetch('https://raw.githubusercontent.com/jgiannotti/weedprice/main/site/public/deals.json')
       .then((res) => res.json())
       .then((data: Deal[]) => {
         const processed = data.map((deal) => ({
