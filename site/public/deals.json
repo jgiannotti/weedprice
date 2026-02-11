@@ -1,0 +1,29 @@
+[
+  {
+    "id": "deal1",
+    "title": "20% off Flower",
+    "description": "20% off all flower strains.",
+    "percent": 20,
+    "type": "percent_off",
+    "dispensary": "FLUENT",
+    "distance": 2.5
+  },
+  {
+    "id": "deal2",
+    "title": "BOGO Vapes",
+    "description": "Buy one get one free on all vape cartridges.",
+    "percent": 50,
+    "type": "bogo",
+    "dispensary": "Trulieve",
+    "distance": 3.1
+  },
+  {
+    "id": "deal3",
+    "title": "$10 off Edibles",
+    "description": "$10 off on all edible products.",
+    "percent": null,
+    "type": "dollar_off",
+    "dispensary": "Curaleaf",
+    "distance": 5.0
+  }
+]
