@@ -13,15 +13,27 @@ interface Deal {
   title: string;
   description?: string;
   percent?: number;
-  type: string;
+  type?: string;
   dispensary: string;
   distance: number;
+  discount?: string;
 }
 
 interface DispensaryGroup {
+  id: string;
   name: string;
   deals: Deal[];
 }
+
+const computeDiscount = (deal: Deal): string => {
+  if (deal.type && deal.type.toLowerCase().includes('bogo')) {
+    return 'BOGO';
+  }
+  if (deal.percent) {
+    return `${deal.percent}% off`;
+  }
+  return '';
+};
 
 const App: React.FC = () => {
   const [deals, setDeals] = useState<Deal[]>([]);
@@ -30,15 +42,27 @@ const App: React.FC = () => {
 
   useEffect(() => {
     fetch('/deals.json')
-      .then(res => res.json())
+      .then((res) => res.json())
       .then((data: Deal[]) => {
-        setDeals(data);
+        const processed = data.map((deal) => ({
+          ...deal,
+          discount: computeDiscount(deal),
+        }));
+        setDeals(processed);
+
         const groups: { [key: string]: Deal[] } = {};
-        data.forEach(deal => {
-          groups[deal.dispensary] = groups[deal.dispensary] || [];
+        processed.forEach((deal) => {
+          if (!groups[deal.dispensary]) {
+            groups[deal.dispensary] = [];
+          }
           groups[deal.dispensary].push(deal);
         });
-        const grouped = Object.entries(groups).map(([name, deals]) => ({ name, deals }));
+
+        const grouped = Object.entries(groups).map(([name, deals]) => ({
+          id: name,
+          name,
+          deals,
+        }));
         setDispensaries(grouped);
       })
       .catch(() => {
@@ -48,7 +72,7 @@ const App: React.FC = () => {
   }, []);
 
   const topDeals = [...deals]
-    .sort((a, b) => (b.percent || 0) - (a.percent || 0))
+    .sort((a, b) => (b.percent ?? 0) - (a.percent ?? 0))
     .slice(0, 10);
 
   const handleRadiusChange = (value: number) => {
